@@ -1,6 +1,8 @@
 package main
 
 import (
+	"log"
+
 	"github.com/fasthttp/router"
 	docs "github.com/kecci/fasthttp-swagger/docs"
 	httpSwagger "github.com/swaggo/http-swagger"
@@ -61,9 +63,10 @@ func main() {
 	docs.SwaggerInfo.BasePath = ""
 
 	r := router.New()
-	r.GET("/docs/{filepath:*}", fasthttpadaptor.NewFastHTTPHandlerFunc(httpSwagger.WrapHandler))
+	r.GET("/{filepath:*}", fasthttpadaptor.NewFastHTTPHandlerFunc(httpSwagger.WrapHandler))
 	r.GET("/hello", Hello())
 
+	log.Println("Server is running at http://localhost:9090")
 	if err := fasthttp.ListenAndServe(":9090", r.Handler); err != nil {
 		panic(err)
 	}
